@@ -3,14 +3,8 @@ function connectStream() {
 	document.getElementById('chat').style.display = 'flex'
 	let pc = new RTCPeerConnection({
 		iceServers: [{
-				'urls': 'stun:turn.videochat:3478',
-			},
-			{
-				'urls': 'turn:turn.videochat:3478',
-				'username': 'akhil',
-				'credential': 'akhil',
-			}
-		]
+			'urls': 'stun:stun.l.google.com:19302',
+		}]
 	})
 
 	pc.ontrack = function (event) {

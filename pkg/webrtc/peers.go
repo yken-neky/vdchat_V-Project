@@ -24,17 +24,10 @@ var (
 		ICETransportPolicy: webrtc.ICETransportPolicyRelay,
 		ICEServers: []webrtc.ICEServer{
 			{
-
-				URLs: []string{"stun:turn.localhost:3478"},
+				URLs: []string{"stun:stun.l.google.com:19302"},
 			},
 			{
-
-				URLs: []string{"turn:turn.localhost:3478"},
-
-				Username: "akhil",
-
-				Credential:     "sharma",
-				CredentialType: webrtc.ICECredentialTypePassword,
+				URLs: []string{"turn:stun.l.google.com:19302"},
 			},
 		},
 	}
@@ -105,7 +98,7 @@ func (p *Peers) SignalPeerConnections() {
 		for i := range p.Connections {
 			if p.Connections[i].PeerConnection.ConnectionState() == webrtc.PeerConnectionStateClosed {
 				p.Connections = append(p.Connections[:i], p.Connections[i+1:]...)
-				log.Println("a", p.Connections)
+				log.Println("Connection Closed in if of Function tryAgain()", p.Connections)
 				return true
 			}
 
@@ -180,6 +173,7 @@ func (p *Peers) SignalPeerConnections() {
 	}
 }
 
+// DispatchKeyFrame - revisar que hace
 func (p *Peers) DispatchKeyFrame() {
 	p.ListLock.Lock()
 	defer p.ListLock.Unlock()

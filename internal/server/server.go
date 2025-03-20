@@ -42,12 +42,15 @@ func Run() error {
 	app.Get("/room/:uuid/chat", handlers.RoomChat)
 	app.Get("/room/:uuid/chat/websocket", websocket.New(handlers.RoomChatWebsocket))
 	app.Get("/room/:uuid/viewer/websocket", websocket.New(handlers.RoomViewerWebsocket))
+
+	// Streams
 	app.Get("/stream/:suuid", handlers.Stream)
 	app.Get("/stream/:suuid/websocket", websocket.New(handlers.StreamWebsocket, websocket.Config{
 		HandshakeTimeout: 10 * time.Second,
 	}))
 	app.Get("/stream/:suuid/chat/websocket", websocket.New(handlers.StreamChatWebsocket))
 	app.Get("/stream/:suuid/viewer/websocket", websocket.New(handlers.StreamViewerWebsocket))
+
 	app.Static("/", "./assets")
 
 	w.Rooms = make(map[string]*w.Room)
