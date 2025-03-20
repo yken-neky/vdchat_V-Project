@@ -1,7 +1,7 @@
 # DEV
 
 build-dev:
-	docker build -t v -f containers/images/Dockerfile .
+	docker build -t dev-video_chat_app -f containers/images/Dockerfile .
 
 clean-dev:
 	docker-compose -f containers/composes/dc.dev.yml down
