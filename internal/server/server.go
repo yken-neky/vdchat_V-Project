@@ -29,10 +29,38 @@ func Run() error {
 	}
 
 	engine := html.New("./views", ".html")
-	app := fiber.New(fiber.Config{Views: engine})
+	engine.Reload(true) // Recargar templates en desarrollo
+
+	app := fiber.New(fiber.Config{
+		Views:       engine,
+		ViewsLayout: "layouts/main", // Asegurar que coincide con el nombre de la definición
+	})
+
+	app.Use(func(c *fiber.Ctx) error {
+		if c.Protocol() == "http" {
+			return c.Redirect("https://"+c.Hostname()+c.OriginalURL(), 301)
+		}
+		return c.Next()
+	})
+
+	// Configurar Middleware de Seguridad Adicional
+	app.Use(cors.New(cors.Config{
+		AllowOrigins:     "https://localhost, https://192.168.1.100",
+		AllowMethods:     "GET,POST,OPTIONS",
+		AllowHeaders:     "Origin, Content-Type, Accept",
+		AllowCredentials: true,
+	}))
+	app.Use(func(c *fiber.Ctx) error {
+		c.Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+		c.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' ws: wss:")
+		c.Set("X-Frame-Options", "DENY")
+		c.Set("X-Content-Type-Options", "nosniff")
+		return c.Next()
+	})
+	// ------------------------------------------------------------
+
 	app.Use(logger.New())
 	app.Use(cors.New())
-
 	app.Get("/", handlers.Welcome)
 	app.Get("/room/create", handlers.RoomCreate)
 	app.Get("/room/:uuid", handlers.Room)
@@ -56,8 +84,10 @@ func Run() error {
 	w.Rooms = make(map[string]*w.Room)
 	w.Streams = make(map[string]*w.Room)
 	go dispatchKeyFrames()
-	if *cert != "" {
-		return app.ListenTLS(*addr, *cert, *key)
+
+	// Modificar el bloque final de Listen para mejor manejo de HTTPS
+	if *cert != "" && *key != "" {
+		return app.ListenTLS(":443", *cert, *key)
 	}
 	return app.Listen(*addr)
 }
