@@ -32,8 +32,8 @@ func Run() error {
 	engine.Reload(true) // Recargar templates en desarrollo
 
 	app := fiber.New(fiber.Config{
-		Views:       engine,
-		ViewsLayout: "layouts/main", // Asegurar que coincide con el nombre de la definición
+		Views: engine,
+		// ViewsLayout: "layouts/main", // Asegurar que coincide con el nombre de la definición
 	})
 
 	app.Use(func(c *fiber.Ctx) error {

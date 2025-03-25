@@ -1,4 +1,4 @@
-{{ define "layouts/main" }} <!-- Cambiar el nombre de la definición -->
+
 <html>
 {{ template "partials/head" . }}
 
@@ -6,9 +6,8 @@
 {{ template "partials/header" . }}
 
 <!-- Contenido principal -->
-{{ template "content" . }}
+{{ embed }}
 
 {{ template "partials/footer" . }}
 </body>
 </html>
-{{ end }}
