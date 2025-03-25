@@ -58,7 +58,6 @@ func Run() error {
 	// ------------------------------------------------------------
 
 	app.Use(logger.New())
-	app.Use(cors.New())
 	app.Get("/", handlers.Welcome)
 	app.Get("/room/create", handlers.RoomCreate)
 	app.Get("/room/:uuid", handlers.Room)
@@ -77,6 +76,8 @@ func Run() error {
 	app.Get("/stream/:suuid/chat/websocket", websocket.New(handlers.StreamChatWebsocket))
 	app.Get("/stream/:suuid/viewer/websocket", websocket.New(handlers.StreamViewerWebsocket))
 
+	app.Static("/stylesheets", "./assets/stylesheets")
+	app.Static("/javascript", "./assets/javascript")
 	app.Static("/", "./assets")
 
 	w.Rooms = make(map[string]*w.Room)
