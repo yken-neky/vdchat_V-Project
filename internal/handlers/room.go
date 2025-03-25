@@ -26,7 +26,7 @@ func Room(c *fiber.Ctx) error {
 		return nil
 	}
 
-	ws := "ws"
+	ws := "wss"
 	if os.Getenv("ENVIRONMENT") == "PRODUCTION" {
 		ws = "wss"
 	}
