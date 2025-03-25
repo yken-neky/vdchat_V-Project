@@ -51,10 +51,8 @@ func Run() error {
 		AllowCredentials: true,
 	}))
 	app.Use(func(c *fiber.Ctx) error {
-		c.Set("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
-		c.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' ws: wss:")
-		c.Set("X-Frame-Options", "DENY")
-		c.Set("X-Content-Type-Options", "nosniff")
+		c.Set("Content-Security-Policy", "default-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net ws:wss; "+
+			"img-src 'self' data:; font-src 'self' https://cdn.jsdelivr.net")
 		return c.Next()
 	})
 	// ------------------------------------------------------------
